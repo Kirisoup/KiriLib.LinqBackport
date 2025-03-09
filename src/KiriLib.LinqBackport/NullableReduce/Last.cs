@@ -31,4 +31,62 @@ public static partial class Enumerable
 			return enu.Current;
 		}}
 	}
+
+	public static T? Last<T>(this IList<T> source, Predicate<T> f, T? Or = null) 
+		where T : class 
+	{
+		for (int i = source.Count; i >= 0; i--) {
+			var item = source[i];
+			if (f(item)) return item;
+		}
+		return Or;
+	}
+
+	public static T? Last<T>(this IList<T> source, Predicate<T> f, T? Or = null) 
+		where T : struct
+	{
+		for (int i = source.Count; i >= 0; i--) {
+			var item = source[i];
+			if (f(item)) return item;
+		}
+		return Or;
+	}
+
+	public static T? Last<T>(this IEnumerable<T> source, Predicate<T> f, T? Or = null) 
+		where T: class 
+	{
+		switch (source) {
+		case IList<T> list:
+			for (int i = list.Count; i >= 0; i--) {
+				var item = list[i];
+				if (f(item)) return item;
+			}
+			return Or;
+		default: {
+			T? match = null;
+			foreach (var item in source) {
+				if (f(item)) match = item;
+			}
+			return match ?? Or;
+		}}
+	}
+
+	public static T? Last<T>(this IEnumerable<T> source, Predicate<T> f, T? Or = null) 
+		where T: struct 
+	{
+		switch (source) {
+		case IList<T> list:
+			for (int i = list.Count; i >= 0; i--) {
+				var item = list[i];
+				if (f(item)) return item;
+			}
+			return Or;
+		default: {
+			T? match = null;
+			foreach (var item in source) {
+				if (f(item)) match = item;
+			}
+			return match ?? Or;
+		}}
+	}
 }
